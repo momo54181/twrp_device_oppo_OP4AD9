@@ -16,7 +16,7 @@ product           /product                auto                        display="P
 /persist          ext4    /dev/block/by-name/persist                  flags=display="Persist";backup=1
 /persistent       emmc    /dev/block/by-name/frp                      flags=display="Persistent";backup=1
 /metadata         ext4    /dev/block/by-name/metadata                 flags=display="Metadata"
-/data             f2fs    /dev/block/by-name/userdata                 flags=fileencryption=aes-256-xts:aes-256-cts,keydirectory=/metadata/vold/metadata_encryption
+/data             f2fs    /dev/block/by-name/userdata                 flags=fileencryption=ice
 
 # Vbmeta related partitions.
 /vbmeta           emmc    /dev/block/by-name/vbmeta                   flags=display="Vbmeta";flashimg=1;backup=1
