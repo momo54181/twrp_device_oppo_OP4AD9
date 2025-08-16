@@ -39,3 +39,6 @@ PRODUCT_PACKAGES += \
 # Keymaster
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@4.0
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    keymaster_ver=4.0
