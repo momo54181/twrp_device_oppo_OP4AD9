@@ -25,157 +25,42 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+import /init.recovery.qcom_decrypt.rc
+
 on init
     write /sys/class/backlight/panel0-backlight/brightness 200
     setprop sys.usb.configfs 1
-    #ifdef VENDO_EDIT
-    #Shuangquan.du@PSW.AD.Recovery.0, 2019/08/22, Add for fastbood in recovery mode
-    mkdir /config/usb_gadget/g1/functions/ffs.fastboot
-    #endif
 
 on property:ro.boot.usbcontroller=*
     setprop sys.usb.controller ${ro.boot.usbcontroller}
-    #ifdef OPLUS_FEATURE_OTAPACKAGE_UPDATER
-    #Shuangquan.du@PSW.AD.Recovery.0, 2020/08/17, Add for otg flash
-    #write /sys/class/udc/${ro.boot.usbcontroller}/device/../mode peripheral
-    #endif /*OPLUS_FEATURE_OTAPACKAGE_UPDATER*/
+    write /sys/class/udc/${ro.boot.usbcontroller}/device/../mode peripheral
 
 on fs
+    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
-    chmod 0660 /dev/qseecom
-    chown system drmrpc /dev/qseecom
-    chmod 0664 /dev/ion
-    chown system system /dev/ion
-    install_keyring
 
-on fs
-    start hwservicemanager
-    start servicemanager
+    # This must be under on fs, otherwise update_engine wont map the partitions and exit installation
+    symlink /dev/block/bootdevice/by-name/mdm_oem_stanvbk /dev/block/bootdevice/by-name/mdm_oem_stanvbk_a
+    symlink /dev/block/bootdevice/by-name/mdm_oem_stanvbk /dev/block/bootdevice/by-name/mdm_oem_stanvbk_b
+    symlink /dev/block/bootdevice/by-name/mdm_oem_dycnvbk /dev/block/bootdevice/by-name/mdm_oem_dycnvbk_a
+    symlink /dev/block/bootdevice/by-name/mdm_oem_dycnvbk /dev/block/bootdevice/by-name/mdm_oem_dycnvbk_b
+    symlink /dev/block/bootdevice/by-name/spunvm /dev/block/bootdevice/by-name/spunvm_a
+    symlink /dev/block/bootdevice/by-name/spunvm /dev/block/bootdevice/by-name/spunvm_b
 
-# Separate copy needed to use /sbin/linker64 instead of /system/bin/linker64
-service sbinqseecomd /sbin/qseecomd
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
+    # Set fscklog permission
+    chown root system /dev/fscklogs/log
+    chmod 0770 /dev/fscklogs/log
+    # Mount firmware
+    mkdir /firmware
+    mount vfat /dev/block/bootdevice/by-name/modem${ro.boot.slot_suffix} /firmware ro
+    setprop ro.separate.soft ${ro.boot.prjname}
 
-service hwservicemanager /sbin/hwservicemanager
-    user root
-    group root readproc
-    disabled
-    onrestart setprop hwservicemanager.ready false
-    seclabel u:r:recovery:s0
+on property:ro.twrp.fastbootd=1
+    umount /firmware
 
-service servicemanager /sbin/servicemanager
-    user root
-    group root readproc
-    disabled
-    seclabel u:r:recovery:s0
-
-service keystore_auth /sbin/keystore_auth
-    oneshot
-    user system
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service keystore /sbin/keystore /tmp/misc/keystore
-    user root
-    group root drmrpc readproc
-    disabled
-    seclabel u:r:recovery:s0
-
-service gatekeeper-1-0 /sbin/android.hardware.gatekeeper@1.0-service-qti
-    user root
-    group root
-    disabled
-    seclabel u:r:recovery:s0
-
-service keymaster-4-0 /sbin/android.hardware.keymaster@4.0-service-qti
-    user root
-    group root drmrpc
-    disabled
-    seclabel u:r:recovery:s0
-
-####
-on property:hwservicemanager.ready=true
-    start sbinqseecomd
-
-on property:vendor.sys.listeners.registered=true
-    wait /sbin/fingerprint_ready 8
-    start keymaster-4-0
-    start gatekeeper-1-0
-
-on property:ro.crypto.state=unsupported
-    stop sbinqseecomd
-    stop keymaster-4-0
-    stop gatekeeper-1-0
-    #stop servicemanager
-    stop hwservicemanager
-
-on property:ro.crypto.state=unencrypted
-    stop sbinqseecomd
-    stop keymaster-4-0
-    stop gatekeeper-1-0
-    #stop servicemanager
-    stop hwservicemanager
-
-on property:twrp.decrypt.done=true && property:twrp.all.users.decrypted=true
-    stop sbinqseecomd
-    stop keymaster-4-0
-    stop gatekeeper-1-0
-    #stop servicemanager
-    stop hwservicemanager
-
-
-# fix magisk.zip install
-service fixmagisk /init.magisk.sh
-    #oneshot
-    #disabled
-    user root
-    group root
-    seclabel u:r:recovery:s0
-
-
-
-
-
-
-
-# read ro.build.fingerprint from system, setprop it. for ota
-service fingerprintid /init.fingerprintid.sh
-    oneshot
-    disabled
-    user root
-    group root
-    seclabel u:r:recovery:s0
-
-on early-init
-    setprop recovery.perf.mode 1
-    start fingerprintid
+on post-fs
+    start boot-hal-1-1
 
 on boot
-    setprop recovery.perf.mode 0
-    # Enable double-tap to wake
-    #write /sys/devices/virtual/touch/tp_dev/gesture_on 1
-    # Enable OTG
-    #write /sys/class/power_supply/usb/otg_switch 1
-
-on property:recovery.perf.mode=1
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 1
-    write /sys/devices/system/cpu/cpu4/online 1
-    write /sys/devices/system/cpu/cpu5/online 1
-    write /sys/devices/system/cpu/cpu6/online 1
-    write /sys/devices/system/cpu/cpu7/online 1
-
-on property:recovery.perf.mode=0
-    write /sys/devices/system/cpu/cpu1/online 0
-    write /sys/devices/system/cpu/cpu2/online 1
-    write /sys/devices/system/cpu/cpu3/online 0
-    write /sys/devices/system/cpu/cpu4/online 1
-    write /sys/devices/system/cpu/cpu5/online 0
-    write /sys/devices/system/cpu/cpu6/online 1
-    write /sys/devices/system/cpu/cpu7/online 0
+    start health-hal-2-1
