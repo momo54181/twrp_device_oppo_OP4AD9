@@ -29,6 +29,10 @@ PRODUCT_PACKAGES += \
     android.hardware.fastboot@1.0-impl-mock \
     fastbootd
 
+PRODUCT_PACKAGES_ENG += \
+    qcom_decrypt \
+    qcom_decrypt_fbe
+
 # Shipping API level
 PRODUCT_SHIPPING_API_LEVEL := 29
 
