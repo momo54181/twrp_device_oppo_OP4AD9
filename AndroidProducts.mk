@@ -6,9 +6,9 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_OP4AD9.mk
+    $(LOCAL_DIR)/twrp_OP4AD9.mk
 
 COMMON_LUNCH_CHOICES := \
-    omni_OP4AD9-user \
-    omni_OP4AD9-userdebug \
-    omni_OP4AD9-eng
+    twrp_OP4AD9-user \
+    twrp_OP4AD9-userdebug \
+    twrp_OP4AD9-eng
