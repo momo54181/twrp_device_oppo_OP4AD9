@@ -3,8 +3,15 @@
 
 
 # mount point    	fstype          device                                              device2                         flags
+# Logical partitions
+system            /system                 auto                        display="System"logical
+vendor            /vendor                 auto                        display="Vendor";logical
+product           /product                auto                        display="Product";logical
 /recovery           emmc            /dev/block/bootdevice/by-name/recovery                                              flags=slotselect;display="Recovery";backup=1;flashimg=1
 /boot               emmc            /dev/block/bootdevice/by-name/boot                                                  flags=slotselect;display="Boot";backup=1;flashimg=1
+
+/data               f2fs            /dev/block/bootdevice/by-name/userdata                                              flags=fileencryption=ice;wrappedkey
+/metadata           ext4            /dev/block/by-name/metadata                                                         flags=display="Metadata"
 
 # Persistent Firmware & Properties
 /persist		    ext4            /dev/block/bootdevice/by-name/persist                                               flags=display="Persist";fsflags=ro
