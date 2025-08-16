@@ -110,9 +110,6 @@ TARGET_RECOVERY_QCOM_RTC_FIX := true
 TW_NO_SCREEN_BLANK := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_USES_MKE2FS := true
-TW_BRIGHTNESS_PATH := "/sys/devices/platform/soc/ae00000.qcom,mdss_mdp/backlight/panel0-backlight/brightness"
-TW_DEFAULT_BRIGHTNESS := 1620
-TW_MAX_BRIGHTNESS := 2047
 
 # Crypto
 TW_INCLUDE_CRYPTO := true
