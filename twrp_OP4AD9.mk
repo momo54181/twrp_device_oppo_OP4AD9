@@ -24,6 +24,13 @@ PRODUCT_MANUFACTURER := oppo
 # Dynamic
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
+# Build bootctl
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.1-impl-qti \
+    android.hardware.boot@1.1-impl-qti.recovery \
+    android.hardware.boot@1.1-service \
+    bootctl
+
 # Extra required packages
 PRODUCT_PACKAGES += \
     libion
