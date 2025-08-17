@@ -74,3 +74,28 @@ my_engineering                             /my_engineering      ext4    ro,barri
 /dev/block/bootdevice/by-name/ablbak       /ablbak         emmc    defaults                                                        defaults
 /dev/block/bootdevice/by-name/xbl          /xbl            emmc    defaults                                                        defaults
 /dev/block/bootdevice/by-name/xblbak       /xblbak         emmc    defaults                                                        defaults
+/odm                     ext4      odm                                             flags=display=odm;logical
+/odm                     erofs     odm                                             flags=display=odm;logical
+/my_product              ext4      my_product                                      flags=display=my_product;logical
+/my_product              erofs     my_product                                      flags=display=my_product;logical
+/my_company              ext4      my_company                                      flags=display=my_company;logical
+/my_company              erofs     my_company                                      flags=display=my_company;logical
+/my_carrier              ext4      my_carrier                                      flags=display=my_carrier;logical
+/my_carrier              erofs     my_carrier                                      flags=display=my_carrier;logical
+/my_region               ext4      my_region                                       flags=display=my_region;logical
+/my_region               erofs     my_region                                       flags=display=my_region;logical
+/my_bigball              ext4      my_bigball                                      flags=display=my_bigball;logical
+/my_bigball              erofs     my_bigball                                      flags=display=my_bigball;logical
+/my_heytap               ext4      my_heytap                                       flags=display=my_heytap;logical
+/my_heytap               erofs     my_heytap                                       flags=display=my_heytap;logical
+/my_stock                ext4      my_stock                                        flags=display=my_stock;logical
+/my_stock                erofs     my_stock                                        flags=display=my_stock;logical
+/my_preload              ext4      my_preload                                      flags=display=my_preload;logical
+/my_preload              erofs     my_preload                                      flags=display=my_preload;logical
+/my_manifest             ext4      my_manifest                                     flags=display=my_manifest;logical
+/my_manifest             erofs     my_manifest                                     flags=display=my_manifest;logical
+/my_engineering          ext4      my_engineering                                  flags=display=my_engineering;logical
+/my_engineering          erofs     my_engineering                                  flags=display=my_engineering;logical
+/my_colorospro           ext4      my_colorospro                                   flags=display=my_colorospro;logical
+/my_colorospro           erofs     my_colorospro                                   flags=display=my_colorospro;logical
+/metadata                ext4      /dev/block/by-name/metadata                     flags=display=metadata
