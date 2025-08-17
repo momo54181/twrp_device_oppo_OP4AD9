@@ -35,7 +35,7 @@ product           /product                auto                        display="P
 /efsc               emmc            /dev/block/bootdevice/by-name/fsc                                                   flags=backup=1;subpartitionof=/efs1
 /efsg               emmc            /dev/block/bootdevice/by-name/fsg                                                   flags=backup=1;subpartitionof=/efs1
 
-/keymaster                 emmc     /dev/block/bootdevice/by-name/keymaster                                             flags=display="keymaster";backup=1;flashimg=1
+/keymaster                 emmc     /dev/block/bootdevice/by-name/keymaster                                             flags=display="keymaster";
 
 # Removable storage
 /usb-otg            vfat            /dev/block/sdg1                                 /dev/block/sdg                      flags=display="USB-Storage";storage;wipeingui;removable;fsflags="utf8"
