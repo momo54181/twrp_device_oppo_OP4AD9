@@ -129,7 +129,6 @@ TW_NO_SCREEN_BLANK := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TARGET_USES_MKE2FS := true
 TW_EXCLUDE_TWRPAPP := true
-TW_INCLUDE_LOGICAL := my_product my_company my_carrier my_region my_bigball my_heytap my_stock my_stock my_preload my_manifest my_engineering my_colorospro 
 TW_HAS_EDL_MODE := true
 
 # Crypto
